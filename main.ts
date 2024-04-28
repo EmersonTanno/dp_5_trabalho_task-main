@@ -1,10 +1,12 @@
-import app from "./app";
+import App from "./app";
 
-function main() {
-    app.listen(3000, 'localhost', () => {
-        console.log('Server running at port 3000')
-    })
+async function main() {
+    const app = App.getInstance();
+    await App.startDatabase();
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running at port ${PORT}`);
+    });
 }
 
-
-main()
+main();
