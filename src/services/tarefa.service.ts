@@ -18,7 +18,7 @@ export class TarefasService {
         }
     }
 
-    async findById(_id: string) {
+    async findById(_id: String) {
         try{
             const findedTarefa = await tarefaModel.findOne({ _id })
             return findedTarefa
@@ -104,7 +104,7 @@ export class TarefasService {
 
     async findLatestTaskByUser(userId: string) {
         try {
-            const latestTask = await tarefaModel.findOne({ usuarioAssociado: userId }).sort({ createdAt: -1 })
+            const latestTask = await tarefaModel.findOne({ usuarioAssociado: userId }).sort({ dataCriacao: -1 })
             return latestTask;
         } catch (error) {
             console.error('Erro ao encontrar a tarefa mais recente do usuário:', error)

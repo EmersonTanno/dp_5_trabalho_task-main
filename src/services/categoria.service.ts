@@ -37,7 +37,7 @@ export class CategoriaService {
 
     async update(id: string, usuario: any) {
         try{
-            const updatedCategoria = await categoriaModel.findOneAndUpdate({ id: id }, usuario, { new: true })
+            const updatedCategoria = await categoriaModel.findOneAndUpdate({ _id: id }, usuario, { new: true })
             return updatedCategoria
         } catch (error){
             console.error('Erro ao atualizar categoria')
@@ -46,7 +46,7 @@ export class CategoriaService {
 
     async delete(id: string) {
         try{
-            const deletedCategoria = await categoriaModel.deleteOne({ id: id })
+            const deletedCategoria = await categoriaModel.deleteOne({ _id: id })
             return deletedCategoria
         } catch (error){
             console.error('Erro ao deletar categoria')

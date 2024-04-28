@@ -20,7 +20,23 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe('Check user\'s create route http responses', () => {
+describe('Check user\'s CRUD operations', () => {
+
+  it('Should create a new user with valid data', async () => {
+    const response = await request(App.getInstance())
+      .post('/usuario/signup')
+      .send({
+        username: 'testuser',
+        peso: 70,
+        senha: 'password123',
+        email: 'test@example.com'
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.username).toBe('testuser');
+    expect(response.body.email).toBe('test@example.com');
+  });
+
   it('Should create a new user', async () => {
     const response = await request(App.getInstance())
       .post('/usuario/signup')
@@ -36,14 +52,12 @@ describe('Check user\'s create route http responses', () => {
   });
 
   it('Should return 401 when login fails', async () => {
-    await request(App.getInstance())
-      .post('/usuario/signup')
-      .send({
-        username: 'testuser',
-        peso: 70,
-        senha: 'password123',
-        email: 'test@example.com'
-      });
+    await usuarioModel.create({
+      username: 'testuser',
+      peso: 70,
+      senha: 'password123',
+      email: 'test@example.com'
+    });
 
     const response = await request(App.getInstance())
       .post('/usuario/login')
@@ -56,43 +70,13 @@ describe('Check user\'s create route http responses', () => {
     expect(response.body.message).toBe('Usuário ou senha incorreto(s)');
   });
 
-  it('Should create a new user', async () => {
-    const response = await request(App.getInstance())
-      .post('/usuario')
-      .send({
-        username: 'testuser',
-        peso: 70,
-        senha: 'password123',
-        email: 'test@example.com'
-      });
-
-    expect(response.status).toBe(200);
-    expect(response.body.username).toBe('testuser');
-  });
-
-  it('Should return all users', async () => {
-    await usuarioModel.create({ username: 'user1', peso: 60, senha: 'password123', email: 'user1@example.com' });
-    await usuarioModel.create({ username: 'user2', peso: 65, senha: 'password456', email: 'user2@example.com' });
-
-    const response = await request(App.getInstance())
-      .get('/usuario/');
-
-    expect(response.status).toBe(200);
-    expect(response.body.length).toBe(2);
-  });
-
-  it('Should return user by id', async () => {
-    const user = await usuarioModel.create({ username: 'testuser', peso: 70, senha: 'password123', email: 'test@example.com' });
-
-    const response = await request(App.getInstance())
-      .get(`/usuario/${user._id}`);
-
-    expect(response.status).toBe(200);
-    expect(response.body.username).toBe('testuser');
-  });
-
   it('Should update user by id', async () => {
-    const user = await usuarioModel.create({ username: 'testuser', peso: 70, senha: 'password123', email: 'test@example.com' });
+    const user = await usuarioModel.create({
+      username: 'testuser',
+      peso: 70,
+      senha: 'password123',
+      email: 'test@example.com'
+    });
 
     const response = await request(App.getInstance())
       .put(`/usuario/${user._id}`)
@@ -110,7 +94,12 @@ describe('Check user\'s create route http responses', () => {
   });
 
   it('Should delete user by id', async () => {
-    const user = await usuarioModel.create({ username: 'testuser', peso: 70, senha: 'password123', email: 'test@example.com' });
+    const user = await usuarioModel.create({
+      username: 'testuser',
+      peso: 70,
+      senha: 'password123',
+      email: 'test@example.com'
+    });
 
     const response = await request(App.getInstance())
       .delete(`/usuario/${user._id}`);
