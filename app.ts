@@ -28,10 +28,10 @@ class App {
         this.expressApp.use(tarefaRouter);
     }
 
-    public static async startDatabase(): Promise<void> {
+    public static async startDatabase(URI: string = 'mongodb://0.0.0.0:27017/trabalho'): Promise<void> {
         try {
             mongoose.set("strictQuery", true);
-            await mongoose.connect('mongodb://0.0.0.0:27017/trabalho');
+            await mongoose.connect(URI);
             console.log("Connected to database successfully");
         } catch (error) {
             console.error("Cannot connect to database: ", error);

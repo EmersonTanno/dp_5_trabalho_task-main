@@ -8,7 +8,9 @@ let mongoServer: MongoMemoryServer;
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  await App.startDatabase();
+  const mongoUri = mongoServer.getUri();
+  await App.startDatabase(mongoUri);
+
 });
 
 afterEach(async () => {

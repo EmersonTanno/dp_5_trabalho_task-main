@@ -12,7 +12,7 @@ let userId2: string;
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
-    await mongoose.connect(mongoUri);
+    await App.startDatabase(mongoUri);
 
     const user = await usuarioModel.create({
         username: 'testuser',
